@@ -17,7 +17,7 @@ namespace BlogApp.API.Controllers
             _categoryRepository = categoryRepository;
         }
 
-        //
+        // POST: /api/categories
         [HttpPost]
         public async Task<IActionResult> CreateCategory(CreateCategoryRequestDto requestDto)
         {
@@ -28,13 +28,30 @@ namespace BlogApp.API.Controllers
             };
 
             await _categoryRepository.CreateAsync(category);
-            
+
             var response = new CategoryDto
             {
                 Id = category.Id,
                 Name = category.Name,
                 UrlHandle = category.UrlHandle
             };
+
+            return Ok(response);
+        }
+
+        // GET: /api/categories
+        [HttpGet]
+        public async Task<IActionResult> GetAllCategories()
+        {
+            var categories = await _categoryRepository.GetAllAsync();
+            var response = categories
+                .Select(category => new CategoryDto
+                    {
+                        Id = category.Id,
+                        Name = category.Name,
+                        UrlHandle = category.UrlHandle
+                    }
+                ).ToList();
 
             return Ok(response);
         }
