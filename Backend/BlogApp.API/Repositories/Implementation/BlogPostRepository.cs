@@ -25,4 +25,29 @@ public class BlogPostRepository: IBlogPostRepository
     {
         return await _dbContext.BlogPosts.Include(blogPost => blogPost.Categories).ToListAsync();
     }
+
+    public async Task<BlogPost?> GetByIdAsync(Guid id)
+    {
+        return await _dbContext.BlogPosts.Include(blogPost => blogPost.Categories).FirstOrDefaultAsync(blogPost => blogPost.Id == id);
+    }
+
+    public async Task<BlogPost?> UpdateAsync(BlogPost blogPost)
+    {
+        var existingBlogPost = await _dbContext.BlogPosts.Include(b => b.Categories).FirstOrDefaultAsync(b => b.Id == blogPost.Id);
+        
+        if (existingBlogPost is null)
+        {
+            return null;
+        }
+        
+        // Update BlogPost
+        _dbContext.Entry(existingBlogPost).CurrentValues.SetValues(blogPost);
+        
+        // Update Categories
+        existingBlogPost.Categories = blogPost.Categories;
+
+        await _dbContext.SaveChangesAsync();
+
+        return blogPost;
+    }
 }
