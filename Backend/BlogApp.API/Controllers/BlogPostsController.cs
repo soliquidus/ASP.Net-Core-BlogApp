@@ -10,10 +10,12 @@ namespace BlogApp.API.Controllers;
 public class BlogPostsController : Controller
 {
     private readonly IBlogPostRepository _blogPostRepository;
+    private readonly ICategoryRepository _categoryRepository;
 
-    public BlogPostsController(IBlogPostRepository blogPostRepository)
+    public BlogPostsController(IBlogPostRepository blogPostRepository, ICategoryRepository categoryRepository)
     {
         _blogPostRepository = blogPostRepository;
+        _categoryRepository = categoryRepository;
     }
 
     // POST: /api/blogposts
@@ -29,8 +31,18 @@ public class BlogPostsController : Controller
             PublicationDate = requestDto.PublicationDate,
             ShortDescription = requestDto.ShortDescription,
             Title = requestDto.Title,
-            UrlHandle =  requestDto.UrlHandle
+            UrlHandle = requestDto.UrlHandle,
+            Categories = new List<Category>()
         };
+
+        foreach (var categoryGuid in requestDto.Categories)
+        {
+            var category = await _categoryRepository.GetById(categoryGuid);
+            if (category is not null)
+            {
+                blogPost.Categories.Add(category);
+            }
+        }
 
         blogPost = await _blogPostRepository.CreateAsync(blogPost);
 
@@ -44,12 +56,19 @@ public class BlogPostsController : Controller
             PublicationDate = blogPost.PublicationDate,
             ShortDescription = blogPost.ShortDescription,
             Title = blogPost.Title,
-            UrlHandle = blogPost.UrlHandle
+            UrlHandle = blogPost.UrlHandle,
+
+            Categories = blogPost.Categories.Select(c => new CategoryDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                UrlHandle = c.UrlHandle
+            }).ToList()
         };
 
         return Ok(response);
     }
-    
+
     // GET: /api/blogposts
     [HttpGet]
     public async Task<IActionResult> GetAllBlogPosts()
@@ -66,7 +85,14 @@ public class BlogPostsController : Controller
                 PublicationDate = blogPost.PublicationDate,
                 ShortDescription = blogPost.ShortDescription,
                 Title = blogPost.Title,
-                UrlHandle = blogPost.UrlHandle
+                UrlHandle = blogPost.UrlHandle,
+
+                Categories = blogPost.Categories.Select(c => new CategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    UrlHandle = c.UrlHandle
+                }).ToList()
             })
             .ToList();
 
