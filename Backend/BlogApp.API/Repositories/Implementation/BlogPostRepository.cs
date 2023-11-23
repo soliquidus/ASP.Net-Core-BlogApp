@@ -50,4 +50,18 @@ public class BlogPostRepository: IBlogPostRepository
 
         return blogPost;
     }
+
+    public async Task<BlogPost?> DeleteAsync(Guid id)
+    {
+        var blogPost = await _dbContext.BlogPosts.FirstOrDefaultAsync(b => b.Id == id);
+
+        if (blogPost is not null)
+        {
+            _dbContext.BlogPosts.Remove(blogPost);
+            await _dbContext.SaveChangesAsync();
+            return blogPost;
+        }
+
+        return null;
+    }
 }
