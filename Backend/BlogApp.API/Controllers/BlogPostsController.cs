@@ -78,7 +78,24 @@ public class BlogPostsController : Controller
 
         return Ok(response);
     }
+    
+    // GET: /api/blogposts/{urlHandle}
+    [HttpGet]
+    [Route("{urlHandle}")]
+    public async Task<IActionResult> GetBlogPostByUrlHandle(string urlHandle)
+    {
+        var blogPost = await _blogPostRepository.GetByUrlHandleAsync(urlHandle);
+        
+        if (blogPost is null)
+        {
+            return NotFound();
+        }
 
+        var response = ConvertToDtoModel(blogPost);
+
+        return Ok(response);
+    }
+    
     // PUT: /api/blogposts/{id}
     [HttpPut]
     [Route("{id:Guid}")]
