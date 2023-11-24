@@ -15,6 +15,16 @@ namespace BlogApp.API.Controllers
         {
             _imageRepository = imageRepository;
         }
+        
+        // GET: /api/images
+        [HttpGet]
+        public async Task<IActionResult> GetAllImages()
+        {
+            var images = await _imageRepository.GetAll();
+            var response = images.Select(ConvertToDto).ToList();
+
+            return Ok(response);
+        }
 
         // POST: /api/images
         [HttpPost]
@@ -35,15 +45,7 @@ namespace BlogApp.API.Controllers
 
                 blogImage = await _imageRepository.Upload(file, blogImage);
 
-                var response = new BlogImageDto
-                {
-                    Id = blogImage.Id,
-                    Title = blogImage.Title,
-                    CreationDate = blogImage.CreationDate,
-                    FileExtension = blogImage.FileExtension,
-                    FileName = blogImage.FileName,
-                    Url = blogImage.Url
-                };
+                var response = ConvertToDto(blogImage);
 
                 return Ok(response);
             }
@@ -64,6 +66,19 @@ namespace BlogApp.API.Controllers
             {
                 ModelState.AddModelError("file", "File size cannot be more than 10MB");
             }
+        }
+        
+        private static BlogImageDto ConvertToDto(BlogImage blogImage)
+        {
+            return new BlogImageDto
+            {
+                Id = blogImage.Id,
+                Title = blogImage.Title,
+                CreationDate = blogImage.CreationDate,
+                FileExtension = blogImage.FileExtension,
+                FileName = blogImage.FileName,
+                Url = blogImage.Url
+            };
         }
     }
 }

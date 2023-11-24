@@ -18,6 +18,20 @@
   right: 10px;
 }
 
+#image-modal-gallery {
+  overflow-y: scroll;
+}
+
+#image-modal-gallery-view {
+  min-width: 100px;
+  justify-content: center;
+  cursor: pointer;
+}
+
+#image-modal-in-gallery {
+  height: 100px;
+}
+
 // --- Blog Post Creation/Update --- //
 #content {
   height: 350px;
