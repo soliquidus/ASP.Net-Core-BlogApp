@@ -17,6 +17,7 @@ export class EditBlogpostComponent implements OnInit, OnDestroy {
     model?: BlogPost;
     categories$?: Observable<Category[]>;
     selectedCategories?: string[];
+    isVisibleImageSelector: boolean = false;
 
     routeSubscription?: Subscription;
     getBlogPostSubscription?: Subscription;
