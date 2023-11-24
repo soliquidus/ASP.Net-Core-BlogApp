@@ -34,7 +34,7 @@ export class ImageSelectorComponent implements OnInit {
     if (this.file && this.fileName !== '' && this.title !== '') {
       this.imageService.uploadImage(this.file, this.fileName, this.title)
         .subscribe({
-          next: response => {
+          next: () => {
             this.imageUploadForm?.resetForm();
             this.getImages();
           }
@@ -44,5 +44,9 @@ export class ImageSelectorComponent implements OnInit {
 
   private getImages(){
     this.images$ = this.imageService.getAllImages();
+  }
+
+  selectImage(image: BlogImage) {
+    this.imageService.selectImage(image);
   }
 }
