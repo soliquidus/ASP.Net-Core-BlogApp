@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../../features/auth/services/auth.service";
 import {User} from "../../../features/auth/models/user.model";
 import {Router} from "@angular/router";
+import {Roles} from "../../../features/auth/models/roles.model";
 
 @Component({
   selector: 'app-navbar',
@@ -31,4 +32,6 @@ export class NavbarComponent implements OnInit{
     this.authService.logout();
     this.router.navigateByUrl('/');
   }
+
+  protected readonly Roles = Roles;
 }

@@ -38,12 +38,10 @@ export class AuthService {
     const roles = localStorage.getItem('user-roles');
 
     if (email && roles) {
-      const user: User = {
+      return {
         email: email,
         roles: roles?.split(',')
       };
-
-      return user;
     }
 
     return undefined;
