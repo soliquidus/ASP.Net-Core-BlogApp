@@ -7,29 +7,36 @@ import {BlogpostListComponent} from "./features/blog-post/blogpost-list/blogpost
 import {AddBlogpostComponent} from "./features/blog-post/add-blogpost/add-blogpost.component";
 import {EditBlogpostComponent} from "./features/blog-post/edit-blogpost/edit-blogpost.component";
 import {HomeComponent} from "./features/public/home/home.component";
+import {LoginComponent} from "./features/auth/login/login.component";
 import {BlogDetailsComponent} from "./features/public/blog-details/blog-details.component";
+import {authGuard} from "./features/auth/guards/auth.guard";
+
+
+const publicRoutes: Routes = [
+  { path: '', component: HomeComponent},
+  { path: 'login', component: LoginComponent },
+  { path: 'blog/:url', component: BlogDetailsComponent },
+];
+
+const adminRoutes: Routes = [
+  { path: 'categories', component: CategoryListComponent },
+  { path: 'categories/add', component: AddCategoryComponent },
+  { path: 'categories/:id', component: EditCategoryComponent },
+  { path: 'blogposts', component: BlogpostListComponent },
+  { path: 'blogposts/add', component: AddBlogpostComponent },
+  { path: 'blogposts/:id', component: EditBlogpostComponent },
+];
 
 const routes: Routes = [
-  /**
-   * Public Routes
-   */
-
-  {path: '', component: HomeComponent},
-  {path: 'blog/:url', component: BlogDetailsComponent},
-
-  /**
-   * Admin routes
-   */
-
-  // Categories
-  {path: 'admin/categories', component: CategoryListComponent},
-  {path: 'admin/categories/add', component: AddCategoryComponent},
-  {path: 'admin/categories/:id', component: EditCategoryComponent},
-
-  // BlogPosts
-  {path: 'admin/blogposts', component: BlogpostListComponent},
-  {path: 'admin/blogposts/add', component: AddBlogpostComponent},
-  {path: 'admin/blogposts/:id', component: EditBlogpostComponent}
+  {
+    path: '',
+    children: publicRoutes
+  },
+  {
+    path: 'admin',
+    children: adminRoutes,
+    canActivate: [authGuard]
+  },
 ];
 
 @NgModule({
