@@ -37,6 +37,12 @@ export class LoginComponent {
             'Strict'
           );
 
+          // Set user
+          this.authService.setUser({
+            email: response.email,
+            roles: response.roles
+          });
+
           this.router.navigateByUrl('/');
         }
       });
