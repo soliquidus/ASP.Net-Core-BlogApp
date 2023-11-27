@@ -8,13 +8,18 @@ import {AddBlogpostComponent} from "./features/blog-post/add-blogpost/add-blogpo
 import {EditBlogpostComponent} from "./features/blog-post/edit-blogpost/edit-blogpost.component";
 import {HomeComponent} from "./features/public/home/home.component";
 import {BlogDetailsComponent} from "./features/public/blog-details/blog-details.component";
+import {LoginComponent} from "./features/auth/login/login.component";
 
 const routes: Routes = [
   /**
    * Public Routes
    */
 
+  // Home Page
   {path: '', component: HomeComponent},
+  // Login Page
+  {path: 'login', component: LoginComponent},
+  // Blog Posts page
   {path: 'blog/:url', component: BlogDetailsComponent},
 
   /**
